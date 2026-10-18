@@ -4,11 +4,39 @@ import java.util.Date;
 import java.util.List;
 
 public class Planta {
-    private String nombre;
-    private String direccion;
-    private double capacidadMaxGeneracion;
-    private boolean activa;
-    private Date fechaPuestaEnFuncionamiento;
-    private List<Registro> registros;
-    private boolean cumplioAlgunaVezConCuota;
+    protected String nombre;
+    protected String direccion;
+    protected double capacidadMaxGeneracion;
+    protected boolean activa;
+    protected Date fechaPuestaEnFuncionamiento;
+    protected List<Registro> registros;
+    protected boolean cumplioAlgunaVezConCuota;
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public double getCapacidadMaxGeneracion() {
+        return capacidadMaxGeneracion;
+    }
+
+    public boolean isActiva() {
+        return activa;
+    }
+
+    public Date getFechaPuestaEnFuncionamiento() {
+        return fechaPuestaEnFuncionamiento;
+    }
+
+    public List<Registro> getRegistros() {
+        return registros;
+    }
+
+    public boolean isCumplioAlgunaVezConCuota() {
+        return cumplioAlgunaVezConCuota;
+    }
 }
