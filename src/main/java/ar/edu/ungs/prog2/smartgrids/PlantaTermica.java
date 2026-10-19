@@ -1,21 +1,20 @@
 package ar.edu.ungs.prog2.smartgrids;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class PlantaTermica extends Planta{
     private String tipoCombustible;
     private double objetivoEmisionCO2;
     private double capacidadAlmacenamientoCombustible;
 
-    public PlantaTermica(String tipoCombustible, double objetivoEmisionCO2, double capacidadAlmacenamientoCombustible, String nombre, String direccion, double capacidadMaxGeneracion, boolean activa, Date fechaPuestaEnFuncionamiento, boolean cumplioAlgunaVezConCuota) {
+    public PlantaTermica(String tipoCombustible, double objetivoEmisionCO2, double capacidadAlmacenamientoCombustible, String nombre, String direccion, double capacidadMaxGeneracion, LocalDateTime fechaPuestaEnFuncionamiento) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.capacidadMaxGeneracion = capacidadMaxGeneracion;
-        this.activa = activa;
+        this.activa = true;
         this.fechaPuestaEnFuncionamiento = fechaPuestaEnFuncionamiento;
         this.registros = new ArrayList<Registro>();
-        this.cumplioAlgunaVezConCuota = cumplioAlgunaVezConCuota;
         this.tipoCombustible = tipoCombustible;
         this.objetivoEmisionCO2 = objetivoEmisionCO2;
         this.capacidadAlmacenamientoCombustible = capacidadAlmacenamientoCombustible;
@@ -31,5 +30,11 @@ public class PlantaTermica extends Planta{
 
     public double getCapacidadAlmacenamientoCombustible() {
         return capacidadAlmacenamientoCombustible;
+    }
+
+    @Override
+    public boolean cumplioConCuota(LocalDateTime fechaHora) {
+        //TODO implementar
+        return false;
     }
 }

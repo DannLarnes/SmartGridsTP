@@ -1,8 +1,7 @@
 package ar.edu.ungs.prog2.smartgrids;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class PlantaEolica extends PlantaEnergiaRenovable {
 
@@ -10,14 +9,13 @@ public class PlantaEolica extends PlantaEnergiaRenovable {
     private double alturaTorres;
     private double velocidadMinVientro;
 
-    public PlantaEolica(int cantAerogeneradores, double alturaTorres, double velocidadMinVientro, String nombre, String direccion, double capacidadMaxGeneracion, boolean activa, Date fechaPuestaEnFuncionamiento, boolean cumplioAlgunaVezConCuota) {
+    public PlantaEolica(int cantAerogeneradores, double alturaTorres, double velocidadMinVientro, String nombre, String direccion, double capacidadMaxGeneracion, LocalDateTime fechaPuestaEnFuncionamiento) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.capacidadMaxGeneracion = capacidadMaxGeneracion;
-        this.activa = activa;
+        this.activa = true;
         this.fechaPuestaEnFuncionamiento = fechaPuestaEnFuncionamiento;
         this.registros = new ArrayList<Registro>();
-        this.cumplioAlgunaVezConCuota = cumplioAlgunaVezConCuota;
         this.cantAerogeneradores = cantAerogeneradores;
         this.alturaTorres = alturaTorres;
         this.velocidadMinVientro = velocidadMinVientro;
@@ -33,5 +31,11 @@ public class PlantaEolica extends PlantaEnergiaRenovable {
 
     public double getVelocidadMinVientro() {
         return velocidadMinVientro;
+    }
+
+    @Override
+    public boolean cumplioConCuota(LocalDateTime fechaHora) {
+        //TODO implementar
+        return false;
     }
 }
