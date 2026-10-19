@@ -98,5 +98,24 @@ public abstract class Planta {
         this.activa = true;
     }
 
+    public void guardarRegistro( LocalDateTime fechaYHora, double totalEnergiaGenerado, int cantIncidenciasDetectadas){
+        if(!this.activa){
+            throw new RuntimeException("Planta inactiva, no se pueden guardar registros");
+        }
+        Registro ultimo= this.registros.getLast();
+        if (ultimo == null || ultimo.getFechaYHora().isBefore(fechaYHora)){
+            if(this.fechaPuestaEnFuncionamiento.isAfter(fechaYHora)){
+                throw new RuntimeException("FechaHora de registro anterior a puesta en funcionamiento");
+            }
+            if( totalEnergiaGenerado>=0 && cantIncidenciasDetectadas>=0 ){
+                this.registros.add(new Registro(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas));
+            }else{
+                throw new RuntimeException("Datos en registro invalidos");
+            }
+        }else{
+            throw new RuntimeException("Fechahora del registro es igual o anterior al ultimo");
+        }
+    }
+
 
 }

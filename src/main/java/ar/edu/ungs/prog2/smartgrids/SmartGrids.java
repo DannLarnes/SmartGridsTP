@@ -2,6 +2,7 @@ package ar.edu.ungs.prog2.smartgrids;
 
 import java.time.LocalDateTime;
 
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +29,9 @@ public class SmartGrids implements ISmartGrids {
         }
     }
 
-    private LocalDateTime validarYObtenerFechaDeString(String fechaHora){
-        return LocalDateTime.parse(fechaHora);
+    private LocalDateTime ObtenerFechaHoraSinExtra(String fechaHoraStr){
+        LocalDateTime fechaHora =LocalDateTime.parse(fechaHoraStr);
+        return fechaHora.truncatedTo(ChronoUnit.HOURS);
     }
 
     @Override
@@ -94,16 +96,40 @@ public class SmartGrids implements ISmartGrids {
 
     @Override
     public void registrarMonitoreo(String nombre, String fechaHora, double energiaGenerada, int incidencias) {
+        Planta planta = this.validarYObtenerPlanta(nombre);
+        planta.guardarRegistro(this.ObtenerFechaHoraSinExtra(fechaHora),energiaGenerada,incidencias);
 
     }
 
     @Override
     public void registrarMonitoreo(String nombre, String fechaHora, double energiaGenerada, int incidencias, double velocidadViento) {
+        Planta planta = this.validarYObtenerPlanta(nombre);
+        if(planta.getClass().equals(PlantaEolica.class)){
+            PlantaEolica plantaEolica = (PlantaEolica) planta;
+            plantaEolica.guardarRegistro(this.ObtenerFechaHoraSinExtra(fechaHora),energiaGenerada,incidencias,velocidadViento);
+        }else{
+            StringBuilder s = new StringBuilder();
+            s.append("Planta ");
+            s.append(nombre);
+            s.append(" no es una planta Eolica, no admite estos registros");
+            throw new RuntimeException(s.toString());
+        }
 
     }
 
     @Override
     public void registrarMonitoreo(String nombre, String fechaHora, double energiaGenerada, int incidencias, double co2Emitido, double combustibleUtilizado) {
+        Planta planta = this.validarYObtenerPlanta(nombre);
+        if(planta.getClass().equals(PlantaTermica.class)){
+            PlantaTermica plantaTermica = (PlantaTermica) planta;
+            plantaTermica.guardarRegistro(this.ObtenerFechaHoraSinExtra(fechaHora),energiaGenerada,incidencias,co2Emitido,combustibleUtilizado);
+        }else{
+            StringBuilder s = new StringBuilder();
+            s.append("Planta ");
+            s.append(nombre);
+            s.append(" no es una planta Termica, no admite estos registros");
+            throw new RuntimeException(s.toString());
+        }
 
     }
 

@@ -37,4 +37,24 @@ public class PlantaTermica extends Planta{
         //TODO implementar
         return false;
     }
+
+    public void guardarRegistro(LocalDateTime fechaYHora, double totalEnergiaGenerado, int cantIncidenciasDetectadas, double cantCO2Generado, double cantCombustibleUtilizado){
+        if(!this.activa){
+            throw new RuntimeException("Planta inactiva, no se pueden guardar registros");
+        }
+        Registro ultimo= this.registros.getLast();
+        if (ultimo == null || ultimo.getFechaYHora().isBefore(fechaYHora)){
+            if(this.fechaPuestaEnFuncionamiento.isAfter(fechaYHora)){
+                throw new RuntimeException("FechaHora de registro anterior a puesta en funcionamiento");
+            }
+            if( totalEnergiaGenerado>=0 && cantIncidenciasDetectadas>=0 && cantCombustibleUtilizado>=0 && cantCO2Generado>=0){
+                this.registros.add(new RegistroPlantaTermica(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas,cantCO2Generado,cantCombustibleUtilizado));
+            }else{
+                throw new RuntimeException("Datos en registro invalidos");
+            }
+        }else{
+            throw new RuntimeException("Fechahora del registro es igual o anterior al ultimo");
+        }
+    }
+
 }

@@ -1,14 +1,14 @@
 package ar.edu.ungs.prog2.smartgrids;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Registro {
     private String nombrePlanta;
-    private Date fechaYHora;
+    private LocalDateTime fechaYHora;
     private double totalEnergiaGenerado;
     private int cantIncidenciasDetectadas;
 
-    public Registro(String nombrePlanta, Date fechaYHora, double totalEnergiaGenerado, int cantIncidenciasDetectadas) {
+    public Registro(String nombrePlanta, LocalDateTime fechaYHora, double totalEnergiaGenerado, int cantIncidenciasDetectadas) {
         this.nombrePlanta = nombrePlanta;
         this.fechaYHora = fechaYHora;
         this.totalEnergiaGenerado = totalEnergiaGenerado;
@@ -19,7 +19,7 @@ public class Registro {
         return nombrePlanta;
     }
 
-    public Date getFechaYHora() {
+    public LocalDateTime getFechaYHora() {
         return fechaYHora;
     }
 
