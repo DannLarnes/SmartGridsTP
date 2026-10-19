@@ -1,6 +1,7 @@
 package ar.edu.ungs.prog2.smartgrids;
 
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class Planta {
@@ -51,8 +52,11 @@ public abstract class Planta {
 
     // Devuelve el total de energía generado por la planta.
     double consultarTotalGenerado(){
-        //TODO implementar
-        return 0;
+        double totalGenerado = 0;
+        for(Registro registro : registros){
+            totalGenerado+=registro.getTotalEnergiaGenerado();
+        }
+        return totalGenerado;
     }
 
 
@@ -115,6 +119,19 @@ public abstract class Planta {
         }else{
             throw new RuntimeException("Fechahora del registro es igual o anterior al ultimo");
         }
+    }
+
+    public int limpiarMonitoreosSinDatos(){
+        Iterator<Registro> iterator = this.registros.iterator();
+        int eliminados=0;
+        while (iterator.hasNext()){
+            Registro registro = iterator.next();
+            if(registro.getTotalEnergiaGenerado()==0 && registro.getCantIncidenciasDetectadas()==0){
+                iterator.remove();
+                eliminados++;
+            }
+        }
+        return eliminados;
     }
 
 

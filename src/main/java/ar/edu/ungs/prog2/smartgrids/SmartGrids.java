@@ -2,19 +2,28 @@ package ar.edu.ungs.prog2.smartgrids;
 
 import java.time.LocalDateTime;
 
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SmartGrids implements ISmartGrids {
 
     private Map<String,Planta> plantas;
 
+    /* Como el test me pide que devuelva la lista en el orden en el que se registraron
+       agrego esta lista ordenada en el orden que se agregaron los elementos a plantas
+    */
+    private List<String> ordenIngreso;
+
+
     public SmartGrids() {
         this.plantas = new HashMap<>();
+        this.ordenIngreso = new ArrayList<>();
     }
 
+    //Utilidades
+
+    //Valida si una planta existe y la devuelve, en caso de que no exista lanza RuntimeException
     private Planta validarYObtenerPlanta(String nombre) {
         Planta planta = plantas.get(nombre);
         if(planta == null){
@@ -22,6 +31,8 @@ public class SmartGrids implements ISmartGrids {
         }
         return planta;
     }
+
+    //Valida si una planta no existe, en caso de que exista lanza RuntimeException
     private void validarNoExistePlanta(String nombre) {
         Planta planta = plantas.get(nombre);
         if(planta!= null){
@@ -29,16 +40,19 @@ public class SmartGrids implements ISmartGrids {
         }
     }
 
+    //Obtiene LocalDateTime de un String ignorando minutos y segundos
     private LocalDateTime ObtenerFechaHoraSinExtra(String fechaHoraStr){
         LocalDateTime fechaHora =LocalDateTime.parse(fechaHoraStr);
         return fechaHora.truncatedTo(ChronoUnit.HOURS);
     }
+
 
     @Override
     public void registrarPlantaSolar(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio, double superficieCubierta, int cantidadPaneles, double horasRadiacionDiaria) {
         this.validarNoExistePlanta(nombre);
         Planta planta = new PlantaSolar(superficieCubierta,cantidadPaneles,horasRadiacionDiaria,nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento));
         this.plantas.put(nombre,planta);
+        this.ordenIngreso.add(nombre);
     }
 
     @Override
@@ -46,6 +60,7 @@ public class SmartGrids implements ISmartGrids {
         this.validarNoExistePlanta(nombre);
         Planta planta = new PlantaEolica(cantidadAerogeneradores,alturaTorres,velocidadMinimaViento,nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento));
         this.plantas.put(nombre,planta);
+        this.ordenIngreso.add(nombre);
     }
 
     @Override
@@ -53,6 +68,7 @@ public class SmartGrids implements ISmartGrids {
         this.validarNoExistePlanta(nombre);
         Planta planta = new PlantaHidraulica(cantidadTurbinas,capacidadEmbalse,nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento));
         this.plantas.put(nombre,planta);
+        this.ordenIngreso.add(nombre);
     }
 
     @Override
@@ -60,11 +76,23 @@ public class SmartGrids implements ISmartGrids {
         this.validarNoExistePlanta(nombre);
         Planta planta = new PlantaTermica(tipoCombustible,objetivoEmisionesCo2PorHora,capacidadAlmacenamientoCombustible,nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento));
         this.plantas.put(nombre,planta);
+        this.ordenIngreso.add(nombre);
     }
 
     @Override
     public List<String> consultarPlantas() {
-        return List.of();
+        List<String> plantasStrList = new ArrayList<>();
+        for(String plantaNombre:this.ordenIngreso){
+            Planta planta = this.plantas.get(plantaNombre);
+            StringBuilder builder= new StringBuilder();
+            builder.append(planta.getNombre());
+            builder.append(" ");
+            builder.append( planta.estaActiva()? "(ACTIVA)": "(INACTIVA)");
+            builder.append(": ");
+            builder.append(planta.getFechaPuestaEnFuncionamiento().format(DateTimeFormatter.ISO_DATE_TIME));
+            plantasStrList.add(builder.toString());
+        }
+        return plantasStrList;
     }
 
     @Override
@@ -135,7 +163,8 @@ public class SmartGrids implements ISmartGrids {
 
     @Override
     public double totalGenerado(String nombre) {
-        return 0;
+        Planta planta = this.validarYObtenerPlanta(nombre);
+        return planta.consultarTotalGenerado();
     }
 
     @Override
@@ -165,7 +194,11 @@ public class SmartGrids implements ISmartGrids {
 
     @Override
     public int limpiarMonitoreosSinDatos() {
-        return 0;
+        int eliminados=0;
+        for( Planta planta :this.plantas.values()){
+            eliminados+=planta.limpiarMonitoreosSinDatos();
+        }
+        return eliminados;
     }
 
     @Override
