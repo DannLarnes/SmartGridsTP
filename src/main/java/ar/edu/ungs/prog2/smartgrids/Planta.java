@@ -1,6 +1,7 @@
 package ar.edu.ungs.prog2.smartgrids;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,6 +14,35 @@ public abstract class Planta {
     protected List<Registro> registros;
     protected boolean cumplioAlgunaVezConCuota;
     protected List<HistorialInactividad>  historialInactividades;
+
+    public Planta(String nombre, String direccion, double capacidadMaxGeneracion, LocalDateTime fechaPuestaEnFuncionamiento) {
+        this.validarDatosPlanta(nombre,direccion,capacidadMaxGeneracion,fechaPuestaEnFuncionamiento);
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.capacidadMaxGeneracion = capacidadMaxGeneracion;
+        this.activa = true;
+        this.fechaPuestaEnFuncionamiento = fechaPuestaEnFuncionamiento;
+        this.registros = new ArrayList<>();
+        this.cumplioAlgunaVezConCuota = false;
+        this.historialInactividades = new ArrayList<>();
+    }
+
+    private void validarDatosPlanta(String nombre, String direccion, double capacidadMaxGeneracion, LocalDateTime fechaPuestaEnFuncionamiento){
+        if(nombre == null || nombre.isEmpty()){
+            throw new RuntimeException("El nombre de la planta es obligatorio");
+        }
+        if(direccion == null || direccion.isEmpty()){
+            throw new RuntimeException("La direccion de la planta es obligatoria");
+        }
+        if(capacidadMaxGeneracion <= 0){
+            throw new RuntimeException("La capacidad de la planta debe ser mayor a 0");
+        }
+        if(fechaPuestaEnFuncionamiento == null){
+            throw new RuntimeException("La fecha de puesta en funcionamiento es obligatoria");
+        }else if(fechaPuestaEnFuncionamiento.isAfter(LocalDateTime.now())){
+            throw new RuntimeException("La fecha de puesta en funcionamiento no puede ser en el futuro");
+        }
+    }
 
     public String getNombre() {
         return nombre;
@@ -103,6 +133,12 @@ public abstract class Planta {
     }
 
     public void guardarRegistro( LocalDateTime fechaYHora, double totalEnergiaGenerado, int cantIncidenciasDetectadas){
+            validarGuardadoRegistro(fechaYHora);
+            this.registros.add(new Registro(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas));
+
+    }
+
+    protected void validarGuardadoRegistro(LocalDateTime fechaYHora){
         if(!this.activa){
             throw new RuntimeException("Planta inactiva, no se pueden guardar registros");
         }
@@ -110,11 +146,6 @@ public abstract class Planta {
         if (ultimo == null || ultimo.getFechaYHora().isBefore(fechaYHora)){
             if(this.fechaPuestaEnFuncionamiento.isAfter(fechaYHora)){
                 throw new RuntimeException("FechaHora de registro anterior a puesta en funcionamiento");
-            }
-            if( totalEnergiaGenerado>=0 && cantIncidenciasDetectadas>=0 ){
-                this.registros.add(new Registro(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas));
-            }else{
-                throw new RuntimeException("Datos en registro invalidos");
             }
         }else{
             throw new RuntimeException("Fechahora del registro es igual o anterior al ultimo");

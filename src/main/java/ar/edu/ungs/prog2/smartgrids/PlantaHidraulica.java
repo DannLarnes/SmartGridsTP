@@ -8,16 +8,20 @@ public class PlantaHidraulica extends PlantaEnergiaRenovable{
     private int cantTurbinas;
     private double capacidadEmbalse;
 
-    public PlantaHidraulica(int cantTurbinas, double capacidadEmbalse, String nombre, String direccion, double capacidadMaxGeneracion, LocalDateTime fechaPuestaEnFuncionamiento) {
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.capacidadMaxGeneracion = capacidadMaxGeneracion;
-        this.activa = true;
-        this.fechaPuestaEnFuncionamiento = fechaPuestaEnFuncionamiento;
-        this.registros = new ArrayList<Registro>();
+    public PlantaHidraulica(String nombre, String direccion, double capacidadMaxGeneracion, LocalDateTime fechaPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio, int cantTurbinas, double capacidadEmbalse) {
+        super(nombre, direccion, capacidadMaxGeneracion, fechaPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio);
+        this.validarDatosPlantaHidraulica(cantTurbinas, capacidadEmbalse);
         this.cantTurbinas = cantTurbinas;
         this.capacidadEmbalse = capacidadEmbalse;
-        this.historialInactividades = new ArrayList<>();
+    }
+
+    private void validarDatosPlantaHidraulica(int cantTurbinas, double capacidadEmbalse){
+        if(cantTurbinas<=0){
+            throw new RuntimeException("La cantidad de turbinas debe ser mayor a 0");
+        }
+        if(capacidadEmbalse<=0){
+            throw new RuntimeException("La capacidad del embalse debe ser mayor a 0");
+        }
     }
 
     public int getCantTurbinas() {

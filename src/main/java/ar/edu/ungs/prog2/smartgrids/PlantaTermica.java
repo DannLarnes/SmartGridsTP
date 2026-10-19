@@ -8,17 +8,24 @@ public class PlantaTermica extends Planta{
     private double objetivoEmisionCO2;
     private double capacidadAlmacenamientoCombustible;
 
-    public PlantaTermica(String tipoCombustible, double objetivoEmisionCO2, double capacidadAlmacenamientoCombustible, String nombre, String direccion, double capacidadMaxGeneracion, LocalDateTime fechaPuestaEnFuncionamiento) {
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.capacidadMaxGeneracion = capacidadMaxGeneracion;
-        this.activa = true;
-        this.fechaPuestaEnFuncionamiento = fechaPuestaEnFuncionamiento;
-        this.registros = new ArrayList<Registro>();
+    public PlantaTermica(String nombre, String direccion, double capacidadMaxGeneracion, LocalDateTime fechaPuestaEnFuncionamiento, String tipoCombustible, double objetivoEmisionCO2, double capacidadAlmacenamientoCombustible) {
+        super(nombre, direccion, capacidadMaxGeneracion, fechaPuestaEnFuncionamiento);
+        this.validarDatosPlantaTermica(tipoCombustible,objetivoEmisionCO2,capacidadAlmacenamientoCombustible);
         this.tipoCombustible = tipoCombustible;
         this.objetivoEmisionCO2 = objetivoEmisionCO2;
         this.capacidadAlmacenamientoCombustible = capacidadAlmacenamientoCombustible;
-        this.historialInactividades = new ArrayList<>();
+    }
+
+    private void validarDatosPlantaTermica(String tipoCombustible, double objetivoEmisionCO2, double capacidadAlmacenamientoCombustible) {
+        if(tipoCombustible== null || tipoCombustible.isEmpty()){
+            throw new RuntimeException("El tipo de combustible es obligatorio en plantas de energia termica");
+        }
+        if(objetivoEmisionCO2<0){
+            throw new RuntimeException("El objetivo de emisionCO2 no debe ser menor a 0");
+        }
+        if(capacidadAlmacenamientoCombustible<=0){
+            throw new RuntimeException("La capacidad de almacenamiento de combustible debe ser mayor a 0");
+        }
     }
 
     public String getTipoCombustible() {
@@ -40,22 +47,8 @@ public class PlantaTermica extends Planta{
     }
 
     public void guardarRegistro(LocalDateTime fechaYHora, double totalEnergiaGenerado, int cantIncidenciasDetectadas, double cantCO2Generado, double cantCombustibleUtilizado){
-        if(!this.activa){
-            throw new RuntimeException("Planta inactiva, no se pueden guardar registros");
-        }
-        Registro ultimo= this.registros.isEmpty()? null : this.registros.getLast();
-        if (ultimo == null || ultimo.getFechaYHora().isBefore(fechaYHora)){
-            if(this.fechaPuestaEnFuncionamiento.isAfter(fechaYHora)){
-                throw new RuntimeException("FechaHora de registro anterior a puesta en funcionamiento");
-            }
-            if( totalEnergiaGenerado>=0 && cantIncidenciasDetectadas>=0 && cantCombustibleUtilizado>=0 && cantCO2Generado>=0){
-                this.registros.add(new RegistroPlantaTermica(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas,cantCO2Generado,cantCombustibleUtilizado));
-            }else{
-                throw new RuntimeException("Datos en registro invalidos");
-            }
-        }else{
-            throw new RuntimeException("Fechahora del registro es igual o anterior al ultimo");
-        }
+        this.validarGuardadoRegistro(fechaYHora);
+        this.registros.add(new RegistroPlantaTermica(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas,cantCO2Generado,cantCombustibleUtilizado));
     }
 
 }

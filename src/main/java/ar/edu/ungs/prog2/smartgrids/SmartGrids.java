@@ -50,7 +50,7 @@ public class SmartGrids implements ISmartGrids {
     @Override
     public void registrarPlantaSolar(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio, double superficieCubierta, int cantidadPaneles, double horasRadiacionDiaria) {
         this.validarNoExistePlanta(nombre);
-        Planta planta = new PlantaSolar(superficieCubierta,cantidadPaneles,horasRadiacionDiaria,nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento));
+        Planta planta = new PlantaSolar(nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento),fuentePrimaria,eficienciaPromedio,superficieCubierta,cantidadPaneles,horasRadiacionDiaria);
         this.plantas.put(nombre,planta);
         this.ordenIngreso.add(nombre);
     }
@@ -58,7 +58,7 @@ public class SmartGrids implements ISmartGrids {
     @Override
     public void registrarPlantaEolica(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio, int cantidadAerogeneradores, double alturaTorres, double velocidadMinimaViento) {
         this.validarNoExistePlanta(nombre);
-        Planta planta = new PlantaEolica(cantidadAerogeneradores,alturaTorres,velocidadMinimaViento,nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento));
+        Planta planta = new PlantaEolica(nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento),fuentePrimaria,eficienciaPromedio,cantidadAerogeneradores,alturaTorres,velocidadMinimaViento);
         this.plantas.put(nombre,planta);
         this.ordenIngreso.add(nombre);
     }
@@ -66,7 +66,7 @@ public class SmartGrids implements ISmartGrids {
     @Override
     public void registrarPlantaHidraulica(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio, int cantidadTurbinas, double capacidadEmbalse) {
         this.validarNoExistePlanta(nombre);
-        Planta planta = new PlantaHidraulica(cantidadTurbinas,capacidadEmbalse,nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento));
+        Planta planta = new PlantaHidraulica(nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento),fuentePrimaria,eficienciaPromedio,cantidadTurbinas,capacidadEmbalse);
         this.plantas.put(nombre,planta);
         this.ordenIngreso.add(nombre);
     }
@@ -74,7 +74,7 @@ public class SmartGrids implements ISmartGrids {
     @Override
     public void registrarPlantaTermica(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String tipoCombustible, double objetivoEmisionesCo2PorHora, double capacidadAlmacenamientoCombustible) {
         this.validarNoExistePlanta(nombre);
-        Planta planta = new PlantaTermica(tipoCombustible,objetivoEmisionesCo2PorHora,capacidadAlmacenamientoCombustible,nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento));
+        Planta planta = new PlantaTermica(nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento),tipoCombustible,objetivoEmisionesCo2PorHora,capacidadAlmacenamientoCombustible);
         this.plantas.put(nombre,planta);
         this.ordenIngreso.add(nombre);
     }

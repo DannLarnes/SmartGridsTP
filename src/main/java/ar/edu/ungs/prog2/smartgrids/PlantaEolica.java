@@ -1,27 +1,33 @@
 package ar.edu.ungs.prog2.smartgrids;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlantaEolica extends PlantaEnergiaRenovable {
 
     private int cantAerogeneradores;
     private double alturaTorres;
-    private double velocidadMinVientro;
+    private double velocidadMinViento;
 
-    public PlantaEolica(int cantAerogeneradores, double alturaTorres, double velocidadMinVientro, String nombre, String direccion, double capacidadMaxGeneracion, LocalDateTime fechaPuestaEnFuncionamiento) {
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.capacidadMaxGeneracion = capacidadMaxGeneracion;
-        this.activa = true;
-        this.fechaPuestaEnFuncionamiento = fechaPuestaEnFuncionamiento;
-        this.registros = new ArrayList<Registro>();
+    public PlantaEolica(String nombre, String direccion, double capacidadMaxGeneracion, LocalDateTime fechaPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio, int cantAerogeneradores, double alturaTorres, double velocidadMinViento) {
+        super(nombre, direccion, capacidadMaxGeneracion, fechaPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio);
+        this.validarDatosPlantaEolica(cantAerogeneradores,alturaTorres,velocidadMinViento);
         this.cantAerogeneradores = cantAerogeneradores;
         this.alturaTorres = alturaTorres;
-        this.velocidadMinVientro = velocidadMinVientro;
-        this.historialInactividades = new ArrayList<>();
+        this.velocidadMinViento = velocidadMinViento;
+    }
+
+    private void validarDatosPlantaEolica(int cantAerogeneradores, double alturaTorres, double velocidadMinViento) {
+        if(cantAerogeneradores <= 0){
+            throw new RuntimeException("La cantidad de aerogeneradores debe ser mayor a 0");
+        }
+        if(alturaTorres <= 0){
+            throw new RuntimeException("La altura de torres debe ser mayor a 0");
+        }
+        if(velocidadMinViento <= 0){
+            throw new RuntimeException("La velocidad minima de viento debe ser mayor a 0");
+        }
+
     }
 
     public int getCantAerogeneradores() {
@@ -32,8 +38,8 @@ public class PlantaEolica extends PlantaEnergiaRenovable {
         return alturaTorres;
     }
 
-    public double getVelocidadMinVientro() {
-        return velocidadMinVientro;
+    public double getVelocidadMinViento() {
+        return velocidadMinViento;
     }
 
     @Override
@@ -49,21 +55,7 @@ public class PlantaEolica extends PlantaEnergiaRenovable {
     }
 
     public void guardarRegistro( LocalDateTime fechaYHora, double totalEnergiaGenerado, int cantIncidenciasDetectadas, double velocidadVientoPromedio){
-        if(!this.activa){
-            throw new RuntimeException("Planta inactiva, no se pueden guardar registros");
-        }
-        Registro ultimo= this.registros.isEmpty()? null : this.registros.getLast();
-        if (ultimo == null || ultimo.getFechaYHora().isBefore(fechaYHora)){
-            if(this.fechaPuestaEnFuncionamiento.isAfter(fechaYHora)){
-                throw new RuntimeException("FechaHora de registro anterior a puesta en funcionamiento");
-            }
-            if( totalEnergiaGenerado>=0 && cantIncidenciasDetectadas>=0 && velocidadVientoPromedio>=0){
-                this.registros.add(new RegistroPlantaEolica(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas, velocidadVientoPromedio));
-            }else{
-                throw new RuntimeException("Datos en registro invalidos");
-            }
-        }else{
-            throw new RuntimeException("Fechahora del registro es igual o anterior al ultimo");
-        }
+        super.validarGuardadoRegistro(fechaYHora);
+        this.registros.add(new RegistroPlantaEolica(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas, velocidadVientoPromedio));
     }
 }
