@@ -102,7 +102,7 @@ public abstract class Planta {
         if(!this.activa){
             throw new RuntimeException("Planta inactiva, no se pueden guardar registros");
         }
-        Registro ultimo= this.registros.getLast();
+        Registro ultimo= this.registros.isEmpty()? null : this.registros.getLast();
         if (ultimo == null || ultimo.getFechaYHora().isBefore(fechaYHora)){
             if(this.fechaPuestaEnFuncionamiento.isAfter(fechaYHora)){
                 throw new RuntimeException("FechaHora de registro anterior a puesta en funcionamiento");

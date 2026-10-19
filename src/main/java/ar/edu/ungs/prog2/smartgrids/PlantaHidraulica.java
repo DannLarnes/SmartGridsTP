@@ -17,6 +17,7 @@ public class PlantaHidraulica extends PlantaEnergiaRenovable{
         this.registros = new ArrayList<Registro>();
         this.cantTurbinas = cantTurbinas;
         this.capacidadEmbalse = capacidadEmbalse;
+        this.historialInactividades = new ArrayList<>();
     }
 
     public int getCantTurbinas() {
