@@ -45,4 +45,15 @@ public class PlantaSolar extends PlantaEnergiaRenovable {
         //TODO implementar
         return false;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(super.toString());
+        s.append(", superficieCubierta=").append(this.superficieCubierta);
+        s.append(", cantPanelesInstalados=").append(this.cantPanelesInstalados);
+        s.append(", horasRadiacionDiaria=").append(this.horasRadiacionDiaria);
+        s.append("}");
+        return s.toString();
+    }
 }

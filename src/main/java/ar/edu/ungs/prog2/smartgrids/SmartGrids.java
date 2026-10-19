@@ -210,4 +210,14 @@ public class SmartGrids implements ISmartGrids {
     public List<String> plantasInactivasEn(String fechaHora) {
         return List.of();
     }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append("SmartGrids{");
+        s.append("plantas=").append(plantas);
+        s.append(", ordenIngreso=").append(ordenIngreso);
+        s.append("}");
+        return s.toString();
+    }
 }

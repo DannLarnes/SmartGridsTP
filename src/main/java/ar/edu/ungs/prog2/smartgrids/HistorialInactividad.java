@@ -21,4 +21,14 @@ public class HistorialInactividad {
     public void setFinInactividad(LocalDateTime finInactividad) {
         this.finInactividad = finInactividad;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder s= new StringBuilder();
+        s.append("HistorialInactividad{");
+        s.append("inicioInactividad=").append(inicioInactividad);
+        s.append("finInactividad=").append(finInactividad);
+        s.append("}");
+        return s.toString();
+    }
 }

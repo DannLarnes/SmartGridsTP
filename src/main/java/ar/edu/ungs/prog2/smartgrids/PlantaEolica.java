@@ -58,4 +58,15 @@ public class PlantaEolica extends PlantaEnergiaRenovable {
         super.validarGuardadoRegistro(fechaYHora);
         this.registros.add(new RegistroPlantaEolica(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas, velocidadVientoPromedio));
     }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(super.toString());
+        s.append(", alturaTorres=").append(alturaTorres);
+        s.append(", velocidadMinViento=").append(velocidadMinViento);
+        s.append(", cantAerogeneradores=").append(cantAerogeneradores);
+        s.append("}");
+        return s.toString();
+    }
 }

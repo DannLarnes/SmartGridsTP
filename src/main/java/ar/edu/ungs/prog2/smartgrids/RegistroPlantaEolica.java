@@ -21,4 +21,14 @@ public class RegistroPlantaEolica extends Registro {
     public double getVelocidadVientoPromedio() {
         return velocidadVientoPromedio;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(super.toString());
+        s.deleteCharAt(s.length()-1);
+        s.append(", velocidadVientoPromedio=").append(velocidadVientoPromedio);
+        s.append("}");
+        return s.toString();
+    }
 }

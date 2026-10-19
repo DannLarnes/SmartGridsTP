@@ -40,4 +40,17 @@ public class Registro {
     public int getCantIncidenciasDetectadas() {
         return cantIncidenciasDetectadas;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(this.getClass().getSimpleName());
+        s.append("{");
+        s.append("nombrePlanta=").append(nombrePlanta);
+        s.append("fechaYHora=").append(fechaYHora);
+        s.append("totalEnergiaGenerado=").append(totalEnergiaGenerado);
+        s.append(", cantIncidenciasDetectadas=").append(cantIncidenciasDetectadas);
+        s.append("}");
+        return s.toString();
+    }
 }

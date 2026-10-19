@@ -166,4 +166,18 @@ public abstract class Planta {
     }
 
 
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(this.getClass().getSimpleName());
+        s.append("{");
+        s.append("nombre=").append(nombre);
+        s.append(", direccion=").append(direccion);
+        s.append(", capacidadMaxGeneracion=").append(capacidadMaxGeneracion);
+        s.append(", fechaPuestaEnFuncionamiento=").append(fechaPuestaEnFuncionamiento);
+        s.append(", activa=").append(activa);
+        s.append(", historialInactividades=").append(historialInactividades);
+        s.append(", registros=").append(registros);
+        return s.toString();
+    }
 }

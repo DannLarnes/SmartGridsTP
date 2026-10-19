@@ -37,4 +37,14 @@ public class PlantaHidraulica extends PlantaEnergiaRenovable{
         //TODO implementar
         return false;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder s= new StringBuilder();
+        s.append(super.toString());
+        s.append(", cantTurbinas=").append(cantTurbinas);
+        s.append(", capacidadEmbalse=").append(capacidadEmbalse);
+        s.append("}");
+        return s.toString();
+    }
 }

@@ -51,4 +51,13 @@ public class PlantaTermica extends Planta{
         this.registros.add(new RegistroPlantaTermica(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas,cantCO2Generado,cantCombustibleUtilizado));
     }
 
+    @Override
+    public String toString() {
+        StringBuilder s=new StringBuilder();
+        s.append(", tipoCombustible=").append(tipoCombustible);
+        s.append(", objetivoEmisionCO2=").append(objetivoEmisionCO2);
+        s.append(", capacidadAlmacenamientoCombustible=").append(capacidadAlmacenamientoCombustible);
+        s.append("}");
+        return s.toString();
+    }
 }

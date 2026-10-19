@@ -29,4 +29,15 @@ public class RegistroPlantaTermica extends Registro {
     public double getCantCombustibleUtilizado() {
         return cantCombustibleUtilizado;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(super.toString());
+        s.deleteCharAt(s.length()-1);
+        s.append(", cantCO2Generado=").append(cantCO2Generado);
+        s.append(", cantCombustibleUtilizado=").append(cantCombustibleUtilizado);
+        s.append("}");
+        return s.toString();
+    }
 }
