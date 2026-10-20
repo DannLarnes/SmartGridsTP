@@ -79,6 +79,24 @@ public class SmartGrids implements ISmartGrids {
         this.ordenIngreso.add(nombre);
     }
 
+    /* Version sin orden
+    @Override
+    public List<String> consultarPlantas() {
+        Collection<Planta> plantas = this.plantas.values();
+        List<String> plantasStrList = new ArrayList<>();
+        for(Planta planta: plantas){
+            StringBuilder builder= new StringBuilder();
+            builder.append(planta.getNombre());
+            builder.append(" ");
+            builder.append( planta.estaActiva()? "(ACTIVA)": "(INACTIVA)");
+            builder.append(": ");
+            builder.append(planta.getFechaPuestaEnFuncionamiento().format(DateTimeFormatter.ISO_DATE_TIME));
+            plantasStrList.add(builder.toString());
+        }
+        return plantasStrList;
+    }*/
+
+    //Version con orden ingreso
     @Override
     public List<String> consultarPlantas() {
         List<String> plantasStrList = new ArrayList<>();
