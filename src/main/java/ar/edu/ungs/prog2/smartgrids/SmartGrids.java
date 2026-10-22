@@ -1,5 +1,6 @@
 package ar.edu.ungs.prog2.smartgrids;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import java.time.format.DateTimeFormatter;
@@ -165,12 +166,34 @@ public class SmartGrids implements ISmartGrids {
 
     @Override
     public int[] histogramaCumplimiento(String nombre, String fechaDesde, String fechaHasta) {
-        return new int[0];
+        Planta planta = this.validarYObtenerPlanta(nombre);
+        LocalDateTime fechaD= LocalDate.parse(fechaDesde).atStartOfDay();
+        LocalDateTime fechaH= LocalDate.parse(fechaHasta).atTime(23, 59, 59);
+        if(!fechaD.isBefore(fechaH)){
+            throw new RuntimeException("Fechas invalidas. fechaDesde debe ser anterior fechaHasta");
+        }
+        return planta.histogramaCumplimiento(fechaD,fechaH);
     }
 
     @Override
     public Map<String, Integer> plantasRenovablesPorFuente() {
-        return Map.of();
+        Map<String, Integer> plantasRenovablesPorFuente = new HashMap<>();
+        for(Planta planta : plantas.values()){
+            //Veo solo las plantas que Hereden de PlantaEnergiaRenovable
+            if(planta instanceof PlantaEnergiaRenovable){
+                //casteo a PlantaEnergiaRenovable
+                PlantaEnergiaRenovable plantaEnergia = (PlantaEnergiaRenovable) planta;
+                //Reviso si ya guarde alguna planta con esta fuente
+                Integer cantidadActual= plantasRenovablesPorFuente.get(plantaEnergia.getFuentePrimaria());
+                //Si no guarde nada con esta fuente inicializo la cantidad
+                if(cantidadActual==null){
+                    cantidadActual= 0;
+                }
+                //Guardo en el map la cantidad actualizada
+                plantasRenovablesPorFuente.put(plantaEnergia.getFuentePrimaria(), cantidadActual+1);
+            }
+        }
+        return plantasRenovablesPorFuente;
     }
 
     @Override

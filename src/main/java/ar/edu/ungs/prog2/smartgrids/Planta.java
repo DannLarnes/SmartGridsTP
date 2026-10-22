@@ -1,9 +1,8 @@
 package ar.edu.ungs.prog2.smartgrids;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public abstract class Planta {
     protected String nombre;
@@ -12,6 +11,7 @@ public abstract class Planta {
     protected boolean activa;
     protected LocalDateTime fechaPuestaEnFuncionamiento;
     protected List<Registro> registros;
+    protected Set<LocalDateTime> fechasRegistradas;
     protected boolean cumplioAlgunaVezConCuota;
     protected List<HistorialInactividad>  historialInactividades;
 
@@ -25,6 +25,7 @@ public abstract class Planta {
         this.registros = new ArrayList<>();
         this.cumplioAlgunaVezConCuota = false;
         this.historialInactividades = new ArrayList<>();
+        this.fechasRegistradas = new HashSet<>();
     }
 
     private void validarDatosPlanta(String nombre, String direccion, double capacidadMaxGeneracion, LocalDateTime fechaPuestaEnFuncionamiento){
@@ -104,10 +105,14 @@ public abstract class Planta {
     public boolean cumplioConCuota(LocalDateTime fechaHora){
         for(Registro registro : this.registros){
             if(registro.getFechaYHora().isEqual(fechaHora)){
-                return registro.getTotalEnergiaGenerado()>= this.capacidadGeneracionParaCumplirCuota();
+                return this.registroCumpleCuota(registro);
             }
         }
         return false;
+    }
+
+    protected boolean registroCumpleCuota(Registro registro){
+        return registro.getTotalEnergiaGenerado()>= this.capacidadGeneracionParaCumplirCuota();
     }
 
     public void desactivar(LocalDateTime fechaHora) {
@@ -138,6 +143,7 @@ public abstract class Planta {
 
     public void guardarRegistro( LocalDateTime fechaYHora, double totalEnergiaGenerado, int cantIncidenciasDetectadas){
             validarGuardadoRegistro(fechaYHora);
+            this.fechasRegistradas.add(fechaYHora);
             this.registros.add(new Registro(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas));
 
     }
@@ -146,14 +152,13 @@ public abstract class Planta {
         if(!this.activa){
             throw new RuntimeException("Planta inactiva, no se pueden guardar registros");
         }
-        Registro ultimo= this.registros.isEmpty()? null : this.registros.getLast();
-        if (ultimo == null || ultimo.getFechaYHora().isBefore(fechaYHora)){
-            if(this.fechaPuestaEnFuncionamiento.isAfter(fechaYHora)){
-                throw new RuntimeException("FechaHora de registro anterior a puesta en funcionamiento");
-            }
-        }else{
-            throw new RuntimeException("Fechahora del registro es igual o anterior al ultimo");
+        if(fechasRegistradas.contains(fechaYHora)){
+            throw new RuntimeException("FechaHora ya registrada");
         }
+        if(this.fechaPuestaEnFuncionamiento.isAfter(fechaYHora)){
+            throw new RuntimeException("FechaHora de registro anterior a puesta en funcionamiento");
+        }
+
     }
 
     public int limpiarMonitoreosSinDatos(){
@@ -162,6 +167,7 @@ public abstract class Planta {
         while (iterator.hasNext()){
             Registro registro = iterator.next();
             if(registro.getTotalEnergiaGenerado()==0 && registro.getCantIncidenciasDetectadas()==0){
+                this.fechasRegistradas.remove(registro.getFechaYHora());
                 iterator.remove();
                 eliminados++;
             }
@@ -201,5 +207,18 @@ public abstract class Planta {
     	
     	return false;
     	
+    }
+
+    public int[] histogramaCumplimiento(LocalDateTime fechaDesde, LocalDateTime fechaHasta) {
+        int[] histogramaCumplimiento = new int[24];
+        for(Registro registro : this.registros) {
+            if(registro.getFechaYHora().isAfter(fechaDesde) && registro.getFechaYHora().isBefore(fechaHasta)) {
+                int indexHistograma = registro.getFechaYHora().getHour();
+                if(this.registroCumpleCuota(registro)){
+                    histogramaCumplimiento[indexHistograma]++;
+                }
+            }
+        }
+        return histogramaCumplimiento;
     }
 }

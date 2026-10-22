@@ -1,7 +1,6 @@
 package ar.edu.ungs.prog2.smartgrids;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class PlantaTermica extends Planta{
     private String tipoCombustible;
@@ -41,16 +40,11 @@ public class PlantaTermica extends Planta{
     }
 
     @Override
-    public boolean cumplioConCuota(LocalDateTime fechaHora) {
-        boolean cumplioMinEnergia = super.cumplioConCuota(fechaHora);
-        if(!cumplioMinEnergia){return false;}
-        for(Registro registro : this.registros){
-            if(registro.getFechaYHora().isEqual(fechaHora)){
-                RegistroPlantaTermica r=(RegistroPlantaTermica)registro;
-                return r.getCantCO2Generado() <= this.objetivoEmisionCO2;
-            }
-        }
-        return false;
+    protected boolean registroCumpleCuota(Registro registro){
+        boolean cumplioMinEnergia = super.registroCumpleCuota(registro);
+        RegistroPlantaTermica r=(RegistroPlantaTermica)registro;
+        return cumplioMinEnergia && (r.getCantCO2Generado() < this.objetivoEmisionCO2);
+
     }
 
     @Override
@@ -60,6 +54,7 @@ public class PlantaTermica extends Planta{
 
     public void guardarRegistro(LocalDateTime fechaYHora, double totalEnergiaGenerado, int cantIncidenciasDetectadas, double cantCO2Generado, double cantCombustibleUtilizado){
         this.validarGuardadoRegistro(fechaYHora);
+        this.fechasRegistradas.add(fechaYHora);
         this.registros.add(new RegistroPlantaTermica(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas,cantCO2Generado,cantCombustibleUtilizado));
     }
 
