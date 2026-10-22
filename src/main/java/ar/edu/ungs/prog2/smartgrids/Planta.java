@@ -90,6 +90,22 @@ public abstract class Planta {
     }
 
 
+    //Devuelve el total de incidencias por hora en forma de arreglo de 24 pos
+    int[] calcularIncidenciasPorHora() {
+
+        int[] incidencias = new int[24];
+
+        for (Registro registro : registros) {
+
+            int hora = registro.getFechaHora().getHour();
+
+            incidencias[hora] += registro.getCantIncidenciasDetectadas();
+        }
+
+        return incidencias;
+    }
+
+
     // Devuelve el histograma de cumplimiento de cuota dentro del período indicado.
     String obtenerHistogramaCumplimientoCuotaPorHora(
             LocalDateTime fechaInicio, LocalDateTime  fechaFin){

@@ -158,10 +158,14 @@ public class SmartGrids implements ISmartGrids {
         return planta.consultarTotalGenerado();
     }
 
+    //retorna un arreglo de 24 pos con las incidencias por hora
     @Override
     public int[] incidenciasPorHora(String nombre) {
-        return new int[0];
+        Planta planta = this.validarYObtenerPlanta(nombre);
+        return planta.calcularIncidenciasPorHora();
+
     }
+
 
     @Override
     public int[] histogramaCumplimiento(String nombre, String fechaDesde, String fechaHasta) {
