@@ -7,6 +7,11 @@ public class HistorialInactividad {
     LocalDateTime finInactividad;
 
     public HistorialInactividad(LocalDateTime inicioInactividad) {
+    	
+    	if(inicioInactividad == null) {
+    		throw new RuntimeException("La fecha de inicio de inactividad no puede ser null");
+    	}
+    	
         this.inicioInactividad = inicioInactividad;
     }
 
@@ -31,4 +36,22 @@ public class HistorialInactividad {
         s.append("}");
         return s.toString();
     }
+    
+    // Recibe una fecha y hora a comparar
+    // Devuelve true si la planta se encontraba inactiva en el rango de esa fechaHora
+    public boolean inactivaEn(LocalDateTime fechaHora) {
+    	
+    	if(fechaHora == null) {
+    		throw new RuntimeException("Fecha a comparar no debe ser null");
+    	}
+  
+    	if(inicioInactividad.isBefore(fechaHora) || inicioInactividad.equals(fechaHora)) {
+    		if(finInactividad == null || finInactividad.isAfter(fechaHora) ) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
+    
 }

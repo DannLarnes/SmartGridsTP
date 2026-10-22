@@ -180,4 +180,22 @@ public abstract class Planta {
         s.append(", registros=").append(registros);
         return s.toString();
     }
+    
+    // Recibe la fechaHoraAComparar
+    // Recorro el historial de inactividad y verifico si estuvo inactiva en la fechaHoraAComparar
+    // Devuelve true si estuvo inactiva en el lapso de esa fechaHora
+    public boolean verificarEstabaInactiva(LocalDateTime fechaHoraAComparar) {
+    	
+    	for(HistorialInactividad inactividad : this.historialInactividades) {
+    		
+    		// Con que una vez se cumpla, ya está, no hace falta seguir recorriendo
+    		if(inactividad.inactivaEn(fechaHoraAComparar)) {
+    			return true;
+    		}
+    		
+    	}
+    	
+    	return false;
+    	
+    }
 }

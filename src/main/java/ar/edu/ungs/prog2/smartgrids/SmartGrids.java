@@ -221,13 +221,86 @@ public class SmartGrids implements ISmartGrids {
 
     @Override
     public List<String> plantasOrdenadasPorEnergiaGenerada() {
-        return List.of();
+    	
+    	// Creo una lista de Plantas con todos los valores del mapa plantas
+    	List<Planta> plantas = new ArrayList<Planta>(this.plantas.values());
+    	
+    	/* Uso el método sort para ordenar la lista, el cual recibe por parámetro el criterio de comparación
+    	 
+    	   Necesita dos entradas, A y B.
+    	   Devuelve un número entero, y en base al resultado, .sort ordena A y B:
+    	   - NEGATIVO: A va antes que B (A<B)
+    	   - CERO: Son iguales (A==B)
+    	   - POSITIVO: A va después que B (B<A)
+    	   
+    	   Utilizo lambda (método sin nombre escrito en una línea) para enviar por parámetro en .sort el criterio de comparación
+    	   
+    	   Double.compare(A,B) compara dos double y devuelve un int (ya que .sort necesita un int):
+    	   - NEGATIVO: A < B
+    	   - CERO: A == B
+    	   - POSITIVO: A > B
+    	   
+    	   Como necesito ordenarlos de mayor a menor, lo invierto en el Double.compare
+    	   Ejemplo:plantas.sort(A,B) A = 5.0, B = 2.0
+    	   Double.compare(2.0 - 5.0) = -3.0 ---> Es un número negativo
+    	   Entonces .sort toma como que A (5.0) antes que B (2.0)
+    	   
+    	*/
+    	
+    	// Ordeno la lista de mayor a menor utilizando list.sort y Double.compare
+    	plantas.sort((a, b) -> Double.compare(b.consultarTotalGenerado(), a.consultarTotalGenerado()));
+    	
+    	// Creo la lista de tipo String
+    	List<String> plantasOrdenadasPorEnergiaGenerada = new ArrayList<>();
+    	
+    	// Recorro con un for each la lista de plantas (ya ordenada de mayor a menor)
+    	// Creo un objeto de tipo  StringBuilder para hacer el String
+    	// Añado a la lista plantasOrdenadasPorEnergiaGenerada el String con el formato solicitado
+    	for (Planta planta : plantas) {
+    		
+    		// Creo un objeto de tipo StringBuilder
+    		StringBuilder builder = new StringBuilder();
+    		
+    		builder.append(planta.getNombre());
+    		builder.append(": ");
+    		builder.append(planta.consultarTotalGenerado());
+    		
+    		plantasOrdenadasPorEnergiaGenerada.add(builder.toString());
+    		
+    	}
+    	
+        return plantasOrdenadasPorEnergiaGenerada;
+        
     }
 
     @Override
     public List<String> plantasInactivasEn(String fechaHora) {
-        return List.of();
+    	
+    	// Creo una lista para almacenar las plantas inactivas
+    	List<String> plantasInactivas = new ArrayList<>();
+    	
+    	// Creo un objeto de tipo LocalDateTime en base al String recibido con la fechaHora
+    	LocalDateTime fechaHoraAComparar = LocalDateTime.parse(fechaHora);
+    	
+    	// Recorro cada planta
+    	for(Planta planta : this.plantas.values()) {
+    		
+    		// Verifico si estaba inactiva en esa fechaHora
+    		boolean estabaInactiva = planta.verificarEstabaInactiva(fechaHoraAComparar);
+    		
+    		// Si estaba inactiva, agrego el nombre de la planta a la lista de plantasInactivas
+    		if(estabaInactiva) {
+    			plantasInactivas.add(planta.getNombre());
+    		}
+    		
+    	}
+    	
+        return plantasInactivas;
+        
     }
+    
+    
+    
 
     @Override
     public String toString() {
