@@ -33,9 +33,8 @@ public class PlantaHidraulica extends PlantaEnergiaRenovable{
     }
 
     @Override
-    public boolean cumplioConCuota(LocalDateTime fechaHora) {
-        //TODO implementar
-        return false;
+    public double capacidadGeneracionParaCumplirCuota() {
+        return this.capacidadMaxGeneracion*this.eficienciaPromedio;
     }
 
     @Override

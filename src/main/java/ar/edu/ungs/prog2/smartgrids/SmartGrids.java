@@ -87,7 +87,8 @@ public class SmartGrids implements ISmartGrids {
 
     @Override
     public double capacidadMinimaCuota(String nombre) {
-        return 0;
+        Planta planta = this.validarYObtenerPlanta(nombre);
+        return planta.capacidadGeneracionParaCumplirCuota();
     }
 
     @Override

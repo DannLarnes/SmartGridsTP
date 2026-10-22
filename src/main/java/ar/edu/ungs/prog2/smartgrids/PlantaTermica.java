@@ -42,8 +42,20 @@ public class PlantaTermica extends Planta{
 
     @Override
     public boolean cumplioConCuota(LocalDateTime fechaHora) {
-        //TODO implementar
+        boolean cumplioMinEnergia = super.cumplioConCuota(fechaHora);
+        if(!cumplioMinEnergia){return false;}
+        for(Registro registro : this.registros){
+            if(registro.getFechaYHora().isEqual(fechaHora)){
+                RegistroPlantaTermica r=(RegistroPlantaTermica)registro;
+                return r.getCantCO2Generado() <= this.objetivoEmisionCO2;
+            }
+        }
         return false;
+    }
+
+    @Override
+    public double capacidadGeneracionParaCumplirCuota() {
+        return this.capacidadMaxGeneracion/2;
     }
 
     public void guardarRegistro(LocalDateTime fechaYHora, double totalEnergiaGenerado, int cantIncidenciasDetectadas, double cantCO2Generado, double cantCombustibleUtilizado){

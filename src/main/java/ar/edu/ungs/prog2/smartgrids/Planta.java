@@ -99,12 +99,16 @@ public abstract class Planta {
     }
 
     // Devuelve la capacidad de generación necesaria para cumplir con la cuota.
-    double capacidadGeneracionParaCumplirCuota(){
-        //TODO implementar
-        return 0;
-    }
+    public abstract double capacidadGeneracionParaCumplirCuota();
 
-    public abstract boolean cumplioConCuota(LocalDateTime fechaHora);
+    public boolean cumplioConCuota(LocalDateTime fechaHora){
+        for(Registro registro : this.registros){
+            if(registro.getFechaYHora().isEqual(fechaHora)){
+                return registro.getTotalEnergiaGenerado()>= this.capacidadGeneracionParaCumplirCuota();
+            }
+        }
+        return false;
+    }
 
     public void desactivar(LocalDateTime fechaHora) {
         if (!this.activa){

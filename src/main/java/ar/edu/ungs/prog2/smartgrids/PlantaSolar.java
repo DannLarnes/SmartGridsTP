@@ -41,9 +41,8 @@ public class PlantaSolar extends PlantaEnergiaRenovable {
     }
 
     @Override
-    public boolean cumplioConCuota(LocalDateTime fechaHora) {
-        //TODO implementar
-        return false;
+    public double capacidadGeneracionParaCumplirCuota() {
+        return this.capacidadMaxGeneracion/2 * this.horasRadiacionDiaria/24;
     }
 
     @Override

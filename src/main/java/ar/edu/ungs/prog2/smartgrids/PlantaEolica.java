@@ -43,9 +43,8 @@ public class PlantaEolica extends PlantaEnergiaRenovable {
     }
 
     @Override
-    public boolean cumplioConCuota(LocalDateTime fechaHora) {
-        //TODO implementar
-        return false;
+    public double capacidadGeneracionParaCumplirCuota() {
+        return this.capacidadMaxGeneracion*this.eficienciaPromedio;
     }
 
     // Devuelve los horarios en los que no se alcanzó la velocidad mínima de viento requerida.
