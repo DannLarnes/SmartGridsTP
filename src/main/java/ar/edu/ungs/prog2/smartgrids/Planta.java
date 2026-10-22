@@ -98,7 +98,7 @@ public abstract class Planta {
 
         for (Registro registro : registros) {
 
-            int hora = registro.getFechaHora().getHour();
+            int hora = registro.getFechaYHora().getHour();
 
             incidencias[hora] += registro.getCantIncidenciasDetectadas();
         }
