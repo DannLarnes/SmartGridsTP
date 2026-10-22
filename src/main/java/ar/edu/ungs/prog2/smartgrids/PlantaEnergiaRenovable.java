@@ -3,8 +3,8 @@ package ar.edu.ungs.prog2.smartgrids;
 import java.time.LocalDateTime;
 
 public abstract class PlantaEnergiaRenovable extends Planta {
-    private String fuentePrimaria;
-    private double eficienciaPromedio;
+    protected String fuentePrimaria;
+    protected double eficienciaPromedio;
 
     public PlantaEnergiaRenovable(String nombre, String direccion, double capacidadMaxGeneracion, LocalDateTime fechaPuestaEnFuncionamiento,String fuentePrimaria,double eficienciaPromedio) {
         super(nombre, direccion, capacidadMaxGeneracion, fechaPuestaEnFuncionamiento);

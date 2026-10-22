@@ -3,8 +3,8 @@ package ar.edu.ungs.prog2.smartgrids;
 import java.time.LocalDateTime;
 
 public class HistorialInactividad {
-    LocalDateTime inicioInactividad;
-    LocalDateTime finInactividad;
+    private LocalDateTime inicioInactividad;
+    private LocalDateTime finInactividad;
 
     public HistorialInactividad(LocalDateTime inicioInactividad) {
         this.inicioInactividad = inicioInactividad;

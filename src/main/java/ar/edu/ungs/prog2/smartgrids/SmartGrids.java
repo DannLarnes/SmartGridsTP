@@ -10,15 +10,9 @@ public class SmartGrids implements ISmartGrids {
 
     private Map<String,Planta> plantas;
 
-    /* Como el test me pide que devuelva la lista en el orden en el que se registraron
-       agrego esta lista ordenada en el orden que se agregaron los elementos a plantas
-    */
-    private List<String> ordenIngreso;
-
 
     public SmartGrids() {
-        this.plantas = new HashMap<>();
-        this.ordenIngreso = new ArrayList<>();
+        this.plantas = new LinkedHashMap<>();
     }
 
     //Utilidades
@@ -52,7 +46,6 @@ public class SmartGrids implements ISmartGrids {
         this.validarNoExistePlanta(nombre);
         Planta planta = new PlantaSolar(nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento),fuentePrimaria,eficienciaPromedio,superficieCubierta,cantidadPaneles,horasRadiacionDiaria);
         this.plantas.put(nombre,planta);
-        this.ordenIngreso.add(nombre);
     }
 
     @Override
@@ -60,7 +53,6 @@ public class SmartGrids implements ISmartGrids {
         this.validarNoExistePlanta(nombre);
         Planta planta = new PlantaEolica(nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento),fuentePrimaria,eficienciaPromedio,cantidadAerogeneradores,alturaTorres,velocidadMinimaViento);
         this.plantas.put(nombre,planta);
-        this.ordenIngreso.add(nombre);
     }
 
     @Override
@@ -68,7 +60,6 @@ public class SmartGrids implements ISmartGrids {
         this.validarNoExistePlanta(nombre);
         Planta planta = new PlantaHidraulica(nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento),fuentePrimaria,eficienciaPromedio,cantidadTurbinas,capacidadEmbalse);
         this.plantas.put(nombre,planta);
-        this.ordenIngreso.add(nombre);
     }
 
     @Override
@@ -76,32 +67,13 @@ public class SmartGrids implements ISmartGrids {
         this.validarNoExistePlanta(nombre);
         Planta planta = new PlantaTermica(nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento),tipoCombustible,objetivoEmisionesCo2PorHora,capacidadAlmacenamientoCombustible);
         this.plantas.put(nombre,planta);
-        this.ordenIngreso.add(nombre);
     }
 
-    /* Version sin orden
     @Override
     public List<String> consultarPlantas() {
         Collection<Planta> plantas = this.plantas.values();
         List<String> plantasStrList = new ArrayList<>();
         for(Planta planta: plantas){
-            StringBuilder builder= new StringBuilder();
-            builder.append(planta.getNombre());
-            builder.append(" ");
-            builder.append( planta.estaActiva()? "(ACTIVA)": "(INACTIVA)");
-            builder.append(": ");
-            builder.append(planta.getFechaPuestaEnFuncionamiento().format(DateTimeFormatter.ISO_DATE_TIME));
-            plantasStrList.add(builder.toString());
-        }
-        return plantasStrList;
-    }*/
-
-    //Version con orden ingreso
-    @Override
-    public List<String> consultarPlantas() {
-        List<String> plantasStrList = new ArrayList<>();
-        for(String plantaNombre:this.ordenIngreso){
-            Planta planta = this.plantas.get(plantaNombre);
             StringBuilder builder= new StringBuilder();
             builder.append(planta.getNombre());
             builder.append(" ");
@@ -234,7 +206,6 @@ public class SmartGrids implements ISmartGrids {
         StringBuilder s = new StringBuilder();
         s.append("SmartGrids{");
         s.append("plantas=").append(plantas);
-        s.append(", ordenIngreso=").append(ordenIngreso);
         s.append("}");
         return s.toString();
     }
