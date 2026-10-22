@@ -160,7 +160,11 @@ public abstract class Planta {
     public void guardarRegistro( LocalDateTime fechaYHora, double totalEnergiaGenerado, int cantIncidenciasDetectadas){
             validarGuardadoRegistro(fechaYHora);
             this.fechasRegistradas.add(fechaYHora);
-            this.registros.add(new Registro(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas));
+            Registro nuevoRegistro = new Registro(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas);
+            if(!this.cumplioAlgunaVezConCuota){
+                this.cumplioAlgunaVezConCuota = this.registroCumpleCuota(nuevoRegistro);
+            }
+            this.registros.add(nuevoRegistro);
 
     }
 

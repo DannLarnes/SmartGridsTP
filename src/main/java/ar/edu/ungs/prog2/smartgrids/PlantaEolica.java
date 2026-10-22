@@ -56,7 +56,11 @@ public class PlantaEolica extends PlantaEnergiaRenovable {
     public void guardarRegistro( LocalDateTime fechaYHora, double totalEnergiaGenerado, int cantIncidenciasDetectadas, double velocidadVientoPromedio){
         super.validarGuardadoRegistro(fechaYHora);
         this.fechasRegistradas.add(fechaYHora);
-        this.registros.add(new RegistroPlantaEolica(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas, velocidadVientoPromedio));
+        RegistroPlantaEolica nuevoRegistro = new RegistroPlantaEolica(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas, velocidadVientoPromedio);
+        if(!this.cumplioAlgunaVezConCuota){
+            this.cumplioAlgunaVezConCuota = this.registroCumpleCuota(nuevoRegistro);
+        }
+        this.registros.add(nuevoRegistro);
     }
 
     @Override

@@ -55,7 +55,11 @@ public class PlantaTermica extends Planta{
     public void guardarRegistro(LocalDateTime fechaYHora, double totalEnergiaGenerado, int cantIncidenciasDetectadas, double cantCO2Generado, double cantCombustibleUtilizado){
         this.validarGuardadoRegistro(fechaYHora);
         this.fechasRegistradas.add(fechaYHora);
-        this.registros.add(new RegistroPlantaTermica(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas,cantCO2Generado,cantCombustibleUtilizado));
+        RegistroPlantaTermica nuevoRegistro = new RegistroPlantaTermica(this.nombre,fechaYHora, totalEnergiaGenerado, cantIncidenciasDetectadas,cantCO2Generado,cantCombustibleUtilizado);
+        if(!this.cumplioAlgunaVezConCuota){
+            this.cumplioAlgunaVezConCuota = this.registroCumpleCuota(nuevoRegistro);
+        }
+        this.registros.add(nuevoRegistro);
     }
 
     @Override
