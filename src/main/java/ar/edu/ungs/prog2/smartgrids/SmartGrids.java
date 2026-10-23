@@ -202,12 +202,46 @@ public class SmartGrids implements ISmartGrids {
 
     @Override
     public List<String> plantasQueNuncaCumplieronCuota() {
-        return List.of();
+        List<String> plantasQueNuncaCumplieronCuota = new ArrayList<>();
+        for(Planta planta : plantas.values()){
+            if(!planta.isCumplioAlgunaVezConCuota()){
+                plantasQueNuncaCumplieronCuota.add(planta.getNombre());
+            }
+        }
+        return plantasQueNuncaCumplieronCuota;
     }
 
     @Override
     public String horasSinVelocidadMinimaPorPlantaEolica() {
-        return "";
+        StringBuilder s = new StringBuilder();
+        s.append("Plantas Eolicas: Horas con poco viento");
+        s.append("\n");
+        for(Planta planta : plantas.values()){
+            //tomo solo las plantas eolicas
+            if(planta.getClass() == PlantaEolica.class){
+                PlantaEolica plantaEolica = (PlantaEolica) planta;
+                //Armo el titulo de la planta eolica con el nombre y velocidad minima
+                s.append("- ").append(planta.getNombre()).append(": ")
+                        .append(plantaEolica.getVelocidadMinViento()).append(" m/s \n");
+
+                //Consulto por las horas sin velocidad minima
+                Map<Integer,Double> hsSinVelMin=plantaEolica.obtenerHorasSinVelocidadMinima();
+                List<Integer> horas= new ArrayList<>(hsSinVelMin.keySet());
+                //ordeno el keyset de horas
+                horas.sort((a,b) -> a-b);
+                for(Integer hora : horas){
+                    if(hsSinVelMin.get(hora)>=0){
+                        s.append("     ")
+                // %02d significa: entero (d), mínimo 2 cifras (2), rellenar con ceros (0)
+                // Uso esto ya que el formato espera que la hora en el string tenga dos cifras
+                                .append(String.format("%02d", hora)).append(": ")
+                                .append(hsSinVelMin.get(hora)).append(" m/s \n");
+                    }
+                }
+            }
+        }
+
+        return s.toString();
     }
 
     @Override
