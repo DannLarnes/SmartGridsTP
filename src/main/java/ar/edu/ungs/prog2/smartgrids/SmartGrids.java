@@ -36,7 +36,7 @@ public class SmartGrids implements ISmartGrids {
     }
 
     //Obtiene LocalDateTime de un String ignorando minutos y segundos
-    private LocalDateTime ObtenerFechaHoraSinExtra(String fechaHoraStr){
+    private LocalDateTime obtenerFechaHoraSinExtra(String fechaHoraStr){
         LocalDateTime fechaHora =LocalDateTime.parse(fechaHoraStr);
         return fechaHora.truncatedTo(ChronoUnit.HOURS);
     }
@@ -64,9 +64,9 @@ public class SmartGrids implements ISmartGrids {
     }
 
     @Override
-    public void registrarPlantaTermica(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String tipoCombustible, double objetivoEmisionesCo2PorHora, double capacidadAlmacenamientoCombustible) {
+    public void registrarPlantaTermica(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String tipoCombustible, double objetivoEmisionesCO2PorHora, double capacidadAlmacenamientoCombustible) {
         this.validarNoExistePlanta(nombre);
-        Planta planta = new PlantaTermica(nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento),tipoCombustible,objetivoEmisionesCo2PorHora,capacidadAlmacenamientoCombustible);
+        Planta planta = new PlantaTermica(nombre,direccion,capacidadMaxima,LocalDateTime.parse(fechaHoraPuestaEnFuncionamiento),tipoCombustible,objetivoEmisionesCO2PorHora,capacidadAlmacenamientoCombustible);
         this.plantas.put(nombre,planta);
     }
 
@@ -117,7 +117,7 @@ public class SmartGrids implements ISmartGrids {
     @Override
     public void registrarMonitoreo(String nombre, String fechaHora, double energiaGenerada, int incidencias) {
         Planta planta = this.validarYObtenerPlanta(nombre);
-        planta.guardarRegistro(this.ObtenerFechaHoraSinExtra(fechaHora),energiaGenerada,incidencias);
+        planta.guardarRegistro(this.obtenerFechaHoraSinExtra(fechaHora),energiaGenerada,incidencias);
 
     }
 
@@ -126,7 +126,7 @@ public class SmartGrids implements ISmartGrids {
         Planta planta = this.validarYObtenerPlanta(nombre);
         if(planta.getClass().equals(PlantaEolica.class)){
             PlantaEolica plantaEolica = (PlantaEolica) planta;
-            plantaEolica.guardarRegistro(this.ObtenerFechaHoraSinExtra(fechaHora),energiaGenerada,incidencias,velocidadViento);
+            plantaEolica.guardarRegistro(this.obtenerFechaHoraSinExtra(fechaHora),energiaGenerada,incidencias,velocidadViento);
         }else{
             StringBuilder s = new StringBuilder();
             s.append("Planta ");
@@ -142,7 +142,7 @@ public class SmartGrids implements ISmartGrids {
         Planta planta = this.validarYObtenerPlanta(nombre);
         if(planta.getClass().equals(PlantaTermica.class)){
             PlantaTermica plantaTermica = (PlantaTermica) planta;
-            plantaTermica.guardarRegistro(this.ObtenerFechaHoraSinExtra(fechaHora),energiaGenerada,incidencias,co2Emitido,combustibleUtilizado);
+            plantaTermica.guardarRegistro(this.obtenerFechaHoraSinExtra(fechaHora),energiaGenerada,incidencias,co2Emitido,combustibleUtilizado);
         }else{
             StringBuilder s = new StringBuilder();
             s.append("Planta ");
