@@ -171,6 +171,7 @@ public class SmartGrids implements ISmartGrids {
     @Override
     public int[] histogramaCumplimiento(String nombre, String fechaDesde, String fechaHasta) {
         Planta planta = this.validarYObtenerPlanta(nombre);
+        //inicio las fechas que me pasaron al principio de fecha desde y al final de fechaHasta
         LocalDateTime fechaD= LocalDate.parse(fechaDesde).atStartOfDay();
         LocalDateTime fechaH= LocalDate.parse(fechaHasta).atTime(23, 59, 59);
         if(!fechaD.isBefore(fechaH)){
