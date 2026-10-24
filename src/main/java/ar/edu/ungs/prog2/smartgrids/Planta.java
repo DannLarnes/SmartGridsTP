@@ -1,6 +1,5 @@
 package ar.edu.ungs.prog2.smartgrids;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -73,16 +72,8 @@ public abstract class Planta {
         return cumplioAlgunaVezConCuota;
     }
 
-    // Guarda un nuevo registro de monitoreo.
-    void guardarDatosMonitoreo(LocalDateTime fechaHora,
-                               double totalEnergiaGenerado,
-                               int cantIncidenciasDetectadas){
-
-    }
-
-
     // Devuelve el total de energía generado por la planta.
-    double consultarTotalGenerado(){
+    public double consultarTotalGenerado(){
         double totalGenerado = 0;
         for(Registro registro : registros){
             totalGenerado+=registro.getTotalEnergiaGenerado();
@@ -92,7 +83,7 @@ public abstract class Planta {
 
 
     //Devuelve el total de incidencias por hora en forma de arreglo de 24 pos
-    int[] calcularIncidenciasPorHora() {
+    public int[] calcularIncidenciasPorHora() {
 
         int[] incidencias = new int[24];
 
@@ -104,15 +95,6 @@ public abstract class Planta {
         }
 
         return incidencias;
-    }
-
-
-    // Devuelve el histograma de cumplimiento de cuota dentro del período indicado.
-    String obtenerHistogramaCumplimientoCuotaPorHora(
-            LocalDateTime fechaInicio, LocalDateTime  fechaFin){
-        //TODO implementar
-
-        return "";
     }
 
     // Devuelve la capacidad de generación necesaria para cumplir con la cuota.
